@@ -1,15 +1,15 @@
 ---
 declared-services:
-  my-conversation-service:
+  Conversation-ft:
     label: conversation
     plan: free
 applications:
-- name: conversation-simple
+- name: weather-conversation-aaz
   command: npm start
   path: .
-  memory: 256M
+  memory: 512M
   instances: 1
   services:
-  - my-conversation-service
+  - Conversation-ft
   env:
     NPM_CONFIG_PRODUCTION: false
