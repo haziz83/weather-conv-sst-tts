@@ -3,6 +3,9 @@ declared-services:
   Conversation-ft:
     label: conversation
     plan: free
+  Weather Company Data-p2:
+    label: weather
+    plan: free
 applications:
 - name: weather-conversation-aaz
   command: npm start
