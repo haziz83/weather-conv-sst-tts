@@ -66,7 +66,6 @@ app.post('/api/message', function(req, res) {
 		updateMessage(payload, data, function(response){
 			return res.json(response);
 		});
-		
 	});
 });
 
