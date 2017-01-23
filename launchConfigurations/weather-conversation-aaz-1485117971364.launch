@@ -1,25 +1,14 @@
 {
-    "Params": {
-        "DevMode": {
-            "Instrumentation": {
-                "command": "",
-                "env": {
-                    "BLUEMIX_APP_MGMT_ENABLE": "devconsole+shell+inspector",
-                    "NODE_ENV": "development"
-                },
-                "memory": "384M"
-            },
-            "Packager": "com.ibm.perfectstorm.cloudoe.packager.LiveEditDeploymentPackager"
-        },
-        "Name": "weather-conversation-aaz",
-        "Target": {
-            "Org": "aazraq@eg.ibm.com",
-            "Space": "Conversation",
-            "Url": "https://api.ng.bluemix.net"
-        },
-        "Timeout": 60
+  "ServiceId": "com.ibm.cloudoe.orion.client.deploy",
+  "Params": {
+    "Target": {
+      "Url": "https://api.ng.bluemix.net",
+      "Org": "aazraq@eg.ibm.com",
+      "Space": "Conversation"
     },
-    "Path": "",
-    "ServiceId": "com.ibm.cloudoe.orion.client.deploy",
-    "Type": "Cloud Foundry"
+    "Name": "weather-conversation-aaz",
+    "Instrumentation": {}
+  },
+  "Path": "manifest.yml",
+  "Type": "Cloud Foundry"
 }
