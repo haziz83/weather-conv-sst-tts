@@ -44,8 +44,7 @@ var conversation = new Conversation({
 
 // Endpoint to be call from the client side
 app.post('/api/message', function(req, res) {
-	var workspace = process.env.WORKSPACE_ID || '5cea3898-6427-426f-bcb1-3ae3655e5a3f';
-	// var workspace = process.env.WORKSPACE_ID || '<workspace-id>';
+	var workspace = process.env.WORKSPACE_ID || '<workspace-id>';
 	if (!workspace || workspace === '<workspace-id>') {
 		return res.json({
 			'output': {
@@ -123,6 +122,7 @@ function updateMessage(input, response, callback) {
 	var responseText = null;
 	if (!response.output) {
 		response.output = {};
+		callback(response);
 	} else if (response.entities.length > 0 && response.entities[0].entity === 'city') {
 		var location = getLocationCoordinatesForCity(response.entities[0].value);		
 		getWeatherForecastForCity(location, function(e, weatherOutput) {
@@ -130,8 +130,10 @@ function updateMessage(input, response, callback) {
 			callback(response);
 
 		});
-	} 
-	callback(response);
+	} else {
+		callback(response);
+	}
+
 }
 
 module.exports = app;
