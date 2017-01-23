@@ -19,12 +19,17 @@
 var express = require('express'); // app server
 var bodyParser = require('body-parser'); // parser for post requests
 var Conversation = require('watson-developer-cloud/conversation/v1'); // watson sdk
+var request = require('request'); // request module
 
 var app = express();
 
 // Bootstrap application settings
 app.use(express.static('./public')); // load UI from public folder
 app.use(bodyParser.json());
+
+//Weather Company Endpoint
+var vcap = JSON.parse(process.env.VCAP_SERVICES);
+var weatherCompanyEndpoint = vcap.weatherinsights[0].credentials.url;
 
 // Create the service wrapper
 var conversation = new Conversation({
@@ -61,6 +66,48 @@ app.post('/api/message', function(req, res) {
     return res.json(updateMessage(payload, data));
   });
 });
+
+/**
+ * Get the latitude and longitude of city
+ * @param  {Object} city The target city
+ * @return {Object} location The latitude and longitude of the city
+ */
+function getLocationCoordinatesForCity(city){
+	var location = {};
+	if(city==='Cairo'){
+		location.latitude = '30.0444';
+		location.longitude = '31.2357';
+	} else if(city==='NYC'){
+		location.latitude = '40.7128';
+		location.longitude = '74.0059';
+	}
+	return location;
+}
+
+/**
+ * Get the weather forecast for a city
+ * @param  {Object} city The target city
+ * @return {Object}      Weather Forecast for the specified city.
+ */
+function getWeatherForecastForCity(location,  callback) {
+	var options = {
+		url: weatherCompanyEndpoint + '/api/weather/v1/geocode/' + location.latidude + '/' + location.longitude + '/forecast/daily/3day.json'
+	};
+	request(
+		options,
+		function(error, response, body) {
+			try {
+				var json = JSON.parse(body);
+				var weatherOutput = json.forecasts[1].narrative;
+				callback(null, weatherOutput);
+			} catch (e) {
+				callback(e, null);
+			}
+		}
+	);
+};
+
+ 
 
 /**
  * Updates the response text using the intent confidence

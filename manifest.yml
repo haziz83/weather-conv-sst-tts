@@ -11,5 +11,6 @@ applications:
   instances: 1
   services:
   - Conversation-ft
+  - Weather Company Data-p2
   env:
     NPM_CONFIG_PRODUCTION: false
