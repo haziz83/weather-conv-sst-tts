@@ -44,12 +44,7 @@ var conversation = new Conversation({
 	version: 'v1'
 });
 
-var stt_credentials = Object.assign({
-  username: process.env.SPEECH_TO_TEXT_USERNAME || '<username>',
-  password: process.env.SPEECH_TO_TEXT_PASSWORD || '<username>',
-  url: process.env.SPEECH_TO_TEXT_URL || 'https://stream.watsonplatform.net/speech-to-text/api',
-  version: 'v1',
-}, vcap.speech_to_text[0].credentials);
+var stt_credentials =  vcap.speech_to_text[0].credentials;
 
 // Inform user that TTS is not configured properly or at all
 if (!stt_credentials || !stt_credentials.username || stt_credentials.username === '<username>') {
@@ -60,12 +55,7 @@ if (!stt_credentials || !stt_credentials.username || stt_credentials.username ==
     'README documentation on how to set these variables.');
 }
 
-var tts_credentials = Object.assign({
-  username: process.env.SPEECH_TO_TEXT_USERNAME || '<username>',
-  password: process.env.SPEECH_TO_TEXT_PASSWORD || '<username>',
-  url: process.env.SPEECH_TO_TEXT_URL || 'https://stream.watsonplatform.net/speech-to-text/api',
-  version: 'v1',
-}, vcap.text_to_speech[0].credentials);
+var tts_credentials =  vcap.text_to_speech[0].credentials;
 
 // Inform user that TTS is not configured properly or at all
 if (!tts_credentials || !tts_credentials.username || tts_credentials.username === '<username>') {
