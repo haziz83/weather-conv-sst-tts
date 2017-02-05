@@ -23,6 +23,7 @@
     "dotenv": "^2.0.0",
     "express": "^4.14.0",
     "watson-developer-cloud": "^2.8.1",
+    "whatwg-fetch": "^2.0.1",
     "request":"*"
   },
   "devDependencies": {

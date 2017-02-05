@@ -20,6 +20,7 @@ var express = require('express'); // app server
 var bodyParser = require('body-parser'); // parser for post requests
 var Conversation = require('watson-developer-cloud/conversation/v1'); // watson sdk
 var request = require('request'); // request module
+var watson = require('watson-developer-cloud');
 
 var app = express();
 
@@ -30,7 +31,8 @@ app.use(bodyParser.json());
 //Weather Company Endpoint
 var vcap = JSON.parse(process.env.VCAP_SERVICES);
 var weatherCompanyEndpoint = vcap.weatherinsights[0].credentials.url;
-
+var sttEndpoint = vcap.speech_to_text[0].credentials.url;
+var ttsEndpoint = vcap.text_to_speech[0].credentials.url;
 // Create the service wrapper
 var conversation = new Conversation({
 	// If unspecified here, the CONVERSATION_USERNAME and CONVERSATION_PASSWORD env properties will be checked
@@ -41,6 +43,38 @@ var conversation = new Conversation({
 	version_date: '2016-10-21',
 	version: 'v1'
 });
+
+var stt_credentials = Object.assign({
+  username: process.env.SPEECH_TO_TEXT_USERNAME || '<username>',
+  password: process.env.SPEECH_TO_TEXT_PASSWORD || '<username>',
+  url: process.env.SPEECH_TO_TEXT_URL || 'https://stream.watsonplatform.net/speech-to-text/api',
+  version: 'v1',
+}, vcap.speech_to_text[0].credentials);
+
+// Inform user that TTS is not configured properly or at all
+if (!stt_credentials || !stt_credentials.username || stt_credentials.username === '<username>') {
+  // eslint-disable-next-line
+  console.warn('WARNING: The app has not been configured with a SPEECH_TO_TEXT_USERNAME and/or ' +
+    'a SPEECH_TO_TEXT_PASSWORD environment variable. If you wish to have text to speech ' +
+    'in your working application, please refer to the https://github.com/watson-developer-cloud/car-dashboard ' +
+    'README documentation on how to set these variables.');
+}
+
+var tts_credentials = Object.assign({
+  username: process.env.SPEECH_TO_TEXT_USERNAME || '<username>',
+  password: process.env.SPEECH_TO_TEXT_PASSWORD || '<username>',
+  url: process.env.SPEECH_TO_TEXT_URL || 'https://stream.watsonplatform.net/speech-to-text/api',
+  version: 'v1',
+}, vcap.text_to_speech[0].credentials);
+
+// Inform user that TTS is not configured properly or at all
+if (!tts_credentials || !tts_credentials.username || tts_credentials.username === '<username>') {
+  // eslint-disable-next-line
+  console.warn('WARNING: The app has not been configured with a TEXT_TO_SPEECH_USERNAME and/or ' +
+    'a TEXT_TO_SPEECH_PASSWORD environment variable. If you wish to have text to speech ' +
+    'in your working application, please refer to the https://github.com/watson-developer-cloud/car-dashboard ' +
+    'README documentation on how to set these variables.');
+}
 
 // Endpoint to be call from the client side
 app.post('/api/message', function(req, res) {
@@ -134,5 +168,29 @@ function updateMessage(input, response, callback) {
 	}
 
 }
+
+// Text-to-Speech Integration
+app.get('/api/text-to-speech/token', (req, res, next) =>
+    watson.authorization(tts_credentials).getToken({ url: tts_credentials.url }, (error, token) => {
+      if (error) {
+        if (error.code !== 401)
+          return next(error);
+      } else {
+        res.send(token);
+      }
+    })
+  );
+
+//Speech-to_text Integration
+ app.get('/api/speech-to-text/token', (req, res, next) =>
+    watson.authorization(stt_credentials).getToken({ url: stt_credentials.url }, (error, token) => {
+      if (error) {
+        if (error.code !== 401)
+          return next(error);
+      } else {
+        res.send(token);
+      }
+    })
+  );
 
 module.exports = app;

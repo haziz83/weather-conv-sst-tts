@@ -6,8 +6,14 @@ declared-services:
   Weather Company Data-p2:
     label: weather
     plan: free
+  Speech to Text-de:
+    label: speech_to_text
+    plan: standard
+  Text to Speech-r2:
+    label: text_to_speech
+    plan: standard
 applications:
-- name: weather-conversation-aaz
+- name: weather-conv-sst-tts
   command: npm start
   path: .
   memory: 512M
@@ -15,5 +21,7 @@ applications:
   services:
   - Conversation-ft
   - Weather Company Data-p2
+  - Speech to Text-de
+  - Text to Speech-r2
   env:
     NPM_CONFIG_PRODUCTION: false
