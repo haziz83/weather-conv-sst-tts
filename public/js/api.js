@@ -21,7 +21,7 @@ var Api = (function() {
       return responsePayload;
     },
     setResponsePayload: function(newPayloadStr) {
-      responsePayload = JSON.parse(newPayloadStr);
+      responsePayload = newPayloadStr;
     }
   };
 
