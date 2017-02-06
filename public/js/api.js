@@ -44,8 +44,10 @@ var Api = (function() {
     var http = new XMLHttpRequest();
     http.open('POST', messageEndpoint, true);
     http.setRequestHeader('Content-type', 'application/json');
-    http.onreadystatechange = function() {
-      if (http.readyState === 4 && http.status === 200 && http.responseText) {
+    http.onload	 = function() {
+      if (http.status === 200 && http.responseText) {
+      	var response = JSON.parse(http.responseText);
+        context = response.context;
         Api.setResponsePayload(http.responseText);
       }else{
       	Api.setResponsePayload(JSON.stringify({output: 
