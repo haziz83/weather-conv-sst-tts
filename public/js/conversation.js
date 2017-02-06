@@ -221,12 +221,6 @@ var ConversationPanel = (function() {
     Common.fireEvent(userInput, 'input');
   }
 	function sendMessage(newText){
-		var context;
-	    var latestResponse = Api.getResponsePayload();
-	    if (latestResponse) {
-	      context = latestResponse.context;
-	    }
-	
 		var text;
 	    if (newText) {
 	      text = newText;
@@ -238,7 +232,7 @@ var ConversationPanel = (function() {
 	    }
 	    setMessage('');
 	
-	    Api.sendRequest(text,context);
+	    Api.sendRequest(text);
 	}
   // Handles the submission of input
   function inputKeyDown(event, inputBox) {
