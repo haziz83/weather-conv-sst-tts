@@ -26,7 +26,7 @@ var ConversationPanel = (function() {
   // Initialize the module
   function init() {
     chatUpdateSetup();
-    Api.sendRequest( '', null );
+    Api.sendRequest('', null );
     setupInputBox();
   }
   // Set up callbacks on payload setters in Api module
@@ -206,6 +206,39 @@ var ConversationPanel = (function() {
     }
   }
 
+	// Retrieve the value of the input box
+  function getMessage() {
+    var userInput = document.getElementById('textInput');
+    return userInput.value;
+  }
+
+  // Set the value of the input box
+  function setMessage(text) {
+    var userInput = document.getElementById('textInput');
+    userInput.value = text;
+    userInput.focus();
+    Common.fireEvent(userInput, 'input');
+  }
+	function sendMessage(newText){
+		var context;
+	    var latestResponse = Api.getResponsePayload();
+	    if (latestResponse) {
+	      context = latestResponse.context;
+	    }
+	
+		var text;
+	    if (newText) {
+	      text = newText;
+	    } else {
+	      text = getMessage();
+	    }
+	    if (!text) {
+	      return;
+	    }
+	    setMessage('');
+	
+	    Api.sendRequest(text,context);
+	}
   // Handles the submission of input
   function inputKeyDown(event, inputBox) {
     // Submit on enter key, dis-allowing blank messages

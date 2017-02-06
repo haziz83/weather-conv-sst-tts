@@ -44,7 +44,12 @@ var conversation = new Conversation({
 	version: 'v1'
 });
 
-var stt_credentials =  vcap.speech_to_text[0].credentials;
+var stt_credentials =  Object.assign({
+  username: process.env.SPEECH_TO_TEXT_USERNAME || '<username>',
+  password: process.env.SPEECH_TO_TEXT_PASSWORD || '<username>',
+  url: process.env.SPEECH_TO_TEXT_URL || 'https://stream.watsonplatform.net/speech-to-text/api',
+  version: 'v1',
+},vcap.speech_to_text[0].credentials);
 
 // Inform user that TTS is not configured properly or at all
 if (!stt_credentials || !stt_credentials.username || stt_credentials.username === '<username>') {
@@ -55,7 +60,12 @@ if (!stt_credentials || !stt_credentials.username || stt_credentials.username ==
     'README documentation on how to set these variables.');
 }
 
-var tts_credentials =  vcap.text_to_speech[0].credentials;
+var tts_credentials =  Object.assign({
+  username: process.env.TEXT_TO_SPEECH_USERNAME || '<username>',
+  password: process.env.TEXT_TO_SPEECH_PASSWORD || '<username>',
+  url: process.env.TEXT_TO_SPEECH_URL || 'https://stream.watsonplatform.net/text-to-speech/api',
+  version: 'v1',
+},vcap.text_to_speech[0].credentials);
 
 // Inform user that TTS is not configured properly or at all
 if (!tts_credentials || !tts_credentials.username || tts_credentials.username === '<username>') {
@@ -160,27 +170,27 @@ function updateMessage(input, response, callback) {
 }
 
 // Text-to-Speech Integration
-app.get('/api/text-to-speech/token', (req, res, next) =>
-    watson.authorization(tts_credentials).getToken({ url: tts_credentials.url }, (error, token) => {
+app.get('/api/text-to-speech/token', function(req, res, next){
+    watson.authorization(tts_credentials).getToken({ url: tts_credentials.url }, function(error, token){
       if (error) {
         if (error.code !== 401)
           return next(error);
       } else {
         res.send(token);
       }
-    })
-  );
+    });
+  });
 
 //Speech-to_text Integration
- app.get('/api/speech-to-text/token', (req, res, next) =>
-    watson.authorization(stt_credentials).getToken({ url: stt_credentials.url }, (error, token) => {
+ app.get('/api/speech-to-text/token', function(req, res, next){
+    watson.authorization(stt_credentials).getToken({ url: stt_credentials.url }, function(error, token){
       if (error) {
         if (error.code !== 401)
           return next(error);
       } else {
         res.send(token);
       }
-    })
-  );
+    });
+  });
 
 module.exports = app;

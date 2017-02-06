@@ -11,17 +11,19 @@ var Api = (function() {
 
     // The request/response getters/setters are defined here to prevent internal methods
     // from calling the methods without any of the callbacks that are added elsewhere.
+    //From User to Watson (input)
     getRequestPayload: function() {
       return requestPayload;
     },
     setRequestPayload: function(newPayloadStr) {
       requestPayload = JSON.parse(newPayloadStr);
     },
+    // from Watson to User (output)
     getResponsePayload: function() {
       return responsePayload;
     },
     setResponsePayload: function(newPayloadStr) {
-      responsePayload = newPayloadStr;
+      responsePayload = JSON.parse(newPayloadStr);
     }
   };
 
@@ -45,6 +47,16 @@ var Api = (function() {
     http.onreadystatechange = function() {
       if (http.readyState === 4 && http.status === 200 && http.responseText) {
         Api.setResponsePayload(http.responseText);
+      }else{
+      	Api.setResponsePayload(JSON.stringify({output: 
+      	{ text: ['The service may be down at the moment; please check' +
+          ' <a href="https://status.ng.bluemix.net/" target="_blank">here</a>' +
+          ' for the current status. <br> If the service is OK,' +
+          ' the app may not be configured correctly,' +
+          ' please check workspace id and credentials for typos. <br>' +
+          ' If the service is running and the app is configured correctly,' +
+          ' try refreshing the page and/or trying a different request.']}}));
+          console.error('Server Error when trying to reply');
       }
     };
 
