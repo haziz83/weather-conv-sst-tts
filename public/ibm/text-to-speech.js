@@ -37,8 +37,9 @@ var TTSModule = (function() {
   function textToSpeech() {
     var currentResponsePayloadSetter = Api.setResponsePayload;
     Api.setResponsePayload = function(payload) {
+    	var payloadJSON = JSON.parse(payload);
       currentResponsePayloadSetter.call(Api, payload);
-      playCurrentAudio(payload.output); // Plays audio using output text
+      playCurrentAudio(payloadJSON.output); // Plays audio using output text
     };
   }
 
