@@ -43,11 +43,14 @@ var STTModule = (function() {
 
   function micON() { // When the microphone button is clicked
     if (recording === false) {
+    	var payload = Api.getResponsePayload();
       if (records === 0) { // The first time the mic is clicked - inform user
-        Api.setResponsePayload(JSON.stringify({output: {text: ['Accept the microphone prompt in your browser. Watson will listen soon.'], ref: 'STT'}})); // Dialog box output to let the user know we're recording
+      	payload.output = {text: ['Accept the microphone prompt in your browser. Watson will listen soon.'], ref: 'STT'};
+        Api.setResponsePayload(JSON.stringify(payload)); // Dialog box output to let the user know we're recording
         records++;
       } else {
-        Api.setResponsePayload(JSON.stringify({output: {ref: 'STT'}})); // Let the user record right away
+      	payload.output.ref = 'STT';
+        Api.setResponsePayload(JSON.stringify(payload)); // Let the user record right away
       }
     } else {
       recording = false;
@@ -62,7 +65,8 @@ var STTModule = (function() {
       .then(function(response) {
         return response.text();
       })
-      .then(function(token) {                 // Pass token to Watson Speech-To-Text service
+      .then(function(token) {// Pass token to Watson Speech-To-Text service
+      	var payload = Api.getResponsePayload();
         stream = WatsonSpeech.SpeechToText.recognizeMicrophone({
           token: token,                       // Authorization token to use this service, configured from /speech/stt-token.js file
           continuous: false,                  // False = automatically stop transcription the first time a pause is detected
@@ -82,7 +86,8 @@ var STTModule = (function() {
                 ConversationPanel.sendMessage();             // Send the message to Watson Conversation
               }
             } else { // If there isn't any data to be handled by the conversation, display a message to the user letting them know
-              Api.setResponsePayload(JSON.stringify({output: {text: ['Microphone input cancelled. Please press the button to speak to Watson again']}})); // If the user clicked the microphone button again to cancel current input
+              payload.output = {text: ['Microphone input cancelled. Please press the button to speak to Watson again']};
+              Api.setResponsePayload(JSON.stringify(payload)); // If the user clicked the microphone button again to cancel current input
             }
           })
           .catch(function(err) { // Catch any errors made during the promise
@@ -90,7 +95,8 @@ var STTModule = (function() {
               console.log(err);
             }
             mic.setAttribute('class', 'inactive-mic'); // Reset our microphone button to visually indicate we aren't listening to user anymore
-            Api.setResponsePayload(JSON.stringify({output: {text: ['Watson timed out after a few seconds of inactivity. Please press the button to speak to Watson again.']}}));
+            payload.output = {text: ['Watson timed out after a few seconds of inactivity. Please press the button to speak to Watson again.']};
+            Api.setResponsePayload(JSON.stringify(payload));
           });
       })
       .catch(function(error) { // Catch any other errors and log them
