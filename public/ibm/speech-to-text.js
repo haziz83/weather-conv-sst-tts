@@ -49,7 +49,7 @@ var STTModule = (function() {
         Api.setResponsePayload(JSON.stringify(payload)); // Dialog box output to let the user know we're recording
         records++;
       } else {
-      	payload.output.ref = 'STT';
+      	payload.output = {ref: 'STT'};
         Api.setResponsePayload(JSON.stringify(payload)); // Let the user record right away
       }
     } else {
