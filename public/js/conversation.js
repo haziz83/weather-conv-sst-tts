@@ -230,9 +230,15 @@ var ConversationPanel = (function() {
 	    if (!text) {
 	      return;
 	    }
+	    var context;
+      	var latestResponse = Api.getResponsePayload();
+      	if (latestResponse) {
+        	context = latestResponse.context;
+      	}
+
 	    setMessage('');
 	
-	    Api.sendRequest(text);
+	    Api.sendRequest(text, context);
 	}
   // Handles the submission of input
   function inputKeyDown(event, inputBox) {
