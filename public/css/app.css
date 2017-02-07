@@ -335,7 +335,7 @@ input:-moz-placeholder {
 
 
 .hide {
-  display: none;
+    display: none !important;
 }
 
 .payload .line-numbers, .payload .payload-text {
