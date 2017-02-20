@@ -1,15 +1,15 @@
 ---
 declared-services:
-  Conversation-ft:
+  Conversation:
     label: conversation
     plan: free
-  Weather Company Data-p2:
+  weather company data:
     label: weather
     plan: free
-  Speech to Text-de:
+  speech-to-text:
     label: speech_to_text
     plan: standard
-  Text to Speech-r2:
+  text-to-speech:
     label: text_to_speech
     plan: standard
 applications:
@@ -18,5 +18,10 @@ applications:
   path: .
   memory: 512M
   instances: 1
+  services:
+  - Conversation
+  - weather company data
+  - speech-to-text
+  - text-to-speech
   env:
     NPM_CONFIG_PRODUCTION: false
