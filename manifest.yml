@@ -18,10 +18,5 @@ applications:
   path: .
   memory: 512M
   instances: 1
-  services:
-  - Conversation-ft
-  - Weather Company Data-p2
-  - Speech to Text-de
-  - Text to Speech-r2
   env:
     NPM_CONFIG_PRODUCTION: false
