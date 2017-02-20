@@ -3,7 +3,7 @@ declared-services:
   Conversation:
     label: conversation
     plan: free
-  weather company data:
+  weather-company-data:
     label: weather
     plan: free
   speech-to-text:
@@ -20,7 +20,7 @@ applications:
   instances: 1
   services:
   - Conversation
-  - weather company data
+  - weather-company-data
   - speech-to-text
   - text-to-speech
   env:
